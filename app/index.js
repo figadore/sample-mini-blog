@@ -11,7 +11,7 @@ var express = require('express');
 // Public
 module.exports = {
   init: function init(app) {
-    var apiRoot = "/";
+    var apiRoot = "/api";
     var apiRouter = express.Router();
     // Set api router for app
     app.use(apiRoot, apiRouter);
@@ -19,6 +19,26 @@ module.exports = {
   }
 };
 
+var links = [
+    {
+      href: "/",
+      rel: "root",
+      description: "Blog API Root",
+      method: "GET",
+      returns: [
+        "application/json"
+      ]
+    },
+    {
+      href: "/posts",
+      rel: "posts",
+      description: "List of blog posts",
+      method: "GET",
+      returns: [
+        "application/json"
+      ]
+    }
+];
 /**
  * Add routes to express app
  *
@@ -29,17 +49,21 @@ function addApiRoutes(apiRouter) {
   apiRouter.get('/', function onRequest(req, res, next) {
     res.json({
       data: {},
-      links: [
+      links
+    });
+  });
+
+  apiRouter.get('/posts', function onRequest(req, res, next) {
+    res.json({
+      data: [
         {
-          href: "/ui",
-          rel: "ui",
-          description: "UI for interacting with API",
-          method: "GET",
-          returns: [
-            "text/html"
-          ]
+          "a": "b"
+        },
+        {
+          "c": "d"
         }
-      ]
+      ],
+      links
     });
   });
 }
