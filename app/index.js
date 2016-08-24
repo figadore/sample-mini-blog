@@ -1,10 +1,10 @@
 /* eslint-env node */
-// Customize this file with app routes and logic
 
 // Include external dependencies
 var express = require('express');
 
 // Include local modules
+var posts = require('./posts');
 
 // Setup
 
@@ -37,6 +37,18 @@ var links = [
       returns: [
         "application/json"
       ]
+    },
+    {
+      href: "/posts",
+      rel: "create-post",
+      description: "Create a new blog post",
+      method: "POST",
+      accepts: [
+        "application/json"
+      ],
+      returns: [
+        "application/json"
+      ]
     }
 ];
 /**
@@ -54,16 +66,21 @@ function addApiRoutes(apiRouter) {
   });
 
   apiRouter.get('/posts', function onRequest(req, res, next) {
-    res.json({
-      data: [
-        {
-          "a": "b"
-        },
-        {
-          "c": "d"
-        }
-      ],
-      links
+    posts.fetchAll(function onFetched(err, data) {
+      res.json({
+        data,
+        links
+      });
+    });
+  });
+
+  apiRouter.post('/posts', function onRequest(req, res, next) {
+    posts.create(req.body, function onCreated(err, data) {
+      res.status(201);
+      res.json({
+        data,
+        links
+      });
     });
   });
 }

@@ -62,6 +62,19 @@ describe('API', function connectivitySuite() {
         done();
       });
   });
+  it("should create a new blog post", function test(done) {
+    var post = {
+      title: "review",
+      text: "that movie was great"
+    };
+    chai.request(app)
+      .post('/api/posts')
+      .send(post)
+      .end(function onEnd(err, res) {
+        expect(res).to.have.status(201);
+        done();
+      });
+  });
 
   before(function setLogLevel() {
     oldLogLevel = logger.level();
