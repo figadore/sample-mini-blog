@@ -6,8 +6,8 @@
 
 // Setup
 var postArray = [
-  {title: "first post", text: "this is my first blog post"},
-  {title: "joke", text: "I hate explaining puns to kleptomaniacs, they take everything literally"}
+  {title: "first post", text: "this is my first blog post", id: 1},
+  {title: "joke", text: "I hate explaining puns to kleptomaniacs, they take everything literally", id: 2}
 ];
 
 // Public
