@@ -1,6 +1,7 @@
 /* eslint-env node */
 
 // Include external dependencies
+var Uuid = require('uuid');
 
 // Include local modules
 
@@ -18,6 +19,7 @@ module.exports = {
   },
   create: function create(post, callback) {
     // TODO store in db
+    post.id = Uuid.v4();
     postArray.push(post);
     callback(null, postArray);
   }

@@ -2,6 +2,7 @@
 /* eslint no-unused-vars: 0 */
 /* global React, ReactDOM, Remarkable, $ */
 
+// Component representing a blog post
 var Post = React.createClass({
   rawMarkup: function mdPost() {
     var md = new Remarkable();
@@ -20,6 +21,7 @@ var Post = React.createClass({
   }
 });
 
+// Component for containing all blog functionality
 var PostsBox = React.createClass({
   loadPostsFromServer: function loadPostsFromServer() {
     $.ajax({
@@ -40,17 +42,36 @@ var PostsBox = React.createClass({
   componentDidMount: function componentDidMount() {
     this.loadPostsFromServer();
   },
+  // Send form data to API to create new blog post
+  handlePostSubmit: function handlePostSubmit(post) {
+    console.log({post});
+    $.ajax({
+      url: this.props.url,
+      contentType: 'application/json; charset=utf-8',
+      dataType: 'json',
+      type: 'POST',
+      data: JSON.stringify(post),
+      success: function onSuccess(data) {
+        this.setState({data: data.data});
+      }.bind(this),
+      error: function onError(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   render: function render() {
     return (
       <div className="postsBox">
-        <h1>Posts</h1>
+        <h1>New Blog Post</h1>
+        <PostForm onPostSubmit={this.handlePostSubmit} />
+        <h1>Blog</h1>
         <PostList data={this.state.data} />
-        <PostForm />
       </div>
     );
   }
 });
 
+// Component for listing blog posts
 var PostList = React.createClass({
   render: function render() {
     var postNodes = this.props.data.map(function renderPost(post) {
@@ -68,16 +89,19 @@ var PostList = React.createClass({
   }
 });
 
+// Component for creating a new post
 var PostForm = React.createClass({
   getInitialState: function getInitialState() {
     return {title: '', text: ''};
   },
+  // Keep state in sync with frontend form
   handleTitleChange: function handleTitleChange(e) {
     this.setState({title: e.target.value});
   },
   handleTextChange: function handleTextChange(e) {
     this.setState({text: e.target.value});
   },
+  // Submit post after validation, then clear form
   handleSubmit: function handleSubmit(e) {
     e.preventDefault();
     var title = this.state.title.trim();
@@ -85,6 +109,7 @@ var PostForm = React.createClass({
     if (!text || !title) {
       return;
     }
+    this.props.onPostSubmit({title: title, text: text});
     this.setState({title: '', text: ''});
   },
   render: function render() {
@@ -96,13 +121,16 @@ var PostForm = React.createClass({
           value={this.state.title}
           onChange={this.handleTitleChange}
         />
-        <input
-          type="text"
+        <br />
+        <textarea
+          rows="20"
+          cols="80"
           placeholder="Write something..."
           value={this.state.text}
           onChange={this.handleTextChange}
         />
-        <input type="submit" value="Post" />
+        <br />
+        <input type="submit" value="Submit" />
       </form>
     );
   }
