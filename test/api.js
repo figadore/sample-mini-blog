@@ -58,7 +58,7 @@ describe('API', function connectivitySuite() {
       .end(function onEnd(err, res) {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an.object;
-        expect(res.body.data).to.be.an.array;
+        expect(res.body.data).to.be.instanceof(Array);
         done();
       });
   });
