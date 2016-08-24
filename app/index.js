@@ -5,6 +5,7 @@ var express = require('express');
 
 // Include local modules
 var posts = require('./posts');
+var db = require('./db');
 
 // Setup
 
@@ -16,6 +17,8 @@ module.exports = {
     // Set api router for app
     app.use(apiRoot, apiRouter);
     addApiRoutes(apiRouter);
+    // Return a promise, delays app start until promise complete
+    return db.sync();
   }
 };
 

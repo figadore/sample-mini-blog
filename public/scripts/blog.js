@@ -125,7 +125,7 @@ var PostForm = React.createClass({
         <textarea
           rows="20"
           cols="80"
-          placeholder="Write something..."
+          placeholder="Write something, use markdown..."
           value={this.state.text}
           onChange={this.handleTextChange}
         />
