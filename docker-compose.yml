@@ -2,3 +2,16 @@ app:
   build: .
   ports:
     - 80:80
+  env_file:
+    - ./secrets.list
+  links:
+    - mysql
+mysql:
+  environment:
+    TERM: xterm
+  image: mariadb:10.1
+  env_file:
+    - ./mysql.list
+  # Uncomment the volumes lines if you want persistent data. Modify first arg to writeable location
+  #volumes:
+  #  - ../volumes/blog-mysql:/var/lib/mysql

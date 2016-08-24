@@ -1,17 +1,17 @@
 /* eslint-env node */
-// Customize this file with app routes and logic
 
 // Include external dependencies
 var express = require('express');
 
 // Include local modules
+var posts = require('./posts');
 
 // Setup
 
 // Public
 module.exports = {
   init: function init(app) {
-    var apiRoot = "/";
+    var apiRoot = "/api";
     var apiRouter = express.Router();
     // Set api router for app
     app.use(apiRoot, apiRouter);
@@ -19,6 +19,38 @@ module.exports = {
   }
 };
 
+var links = [
+    {
+      href: "/",
+      rel: "root",
+      description: "Blog API Root",
+      method: "GET",
+      returns: [
+        "application/json"
+      ]
+    },
+    {
+      href: "/posts",
+      rel: "posts",
+      description: "List of blog posts",
+      method: "GET",
+      returns: [
+        "application/json"
+      ]
+    },
+    {
+      href: "/posts",
+      rel: "create-post",
+      description: "Create a new blog post",
+      method: "POST",
+      accepts: [
+        "application/json"
+      ],
+      returns: [
+        "application/json"
+      ]
+    }
+];
 /**
  * Add routes to express app
  *
@@ -29,17 +61,26 @@ function addApiRoutes(apiRouter) {
   apiRouter.get('/', function onRequest(req, res, next) {
     res.json({
       data: {},
-      links: [
-        {
-          href: "/ui",
-          rel: "ui",
-          description: "UI for interacting with API",
-          method: "GET",
-          returns: [
-            "text/html"
-          ]
-        }
-      ]
+      links
+    });
+  });
+
+  apiRouter.get('/posts', function onRequest(req, res, next) {
+    posts.fetchAll(function onFetched(err, data) {
+      res.json({
+        data,
+        links
+      });
+    });
+  });
+
+  apiRouter.post('/posts', function onRequest(req, res, next) {
+    posts.create(req.body, function onCreated(err, data) {
+      res.status(201);
+      res.json({
+        data,
+        links
+      });
     });
   });
 }
