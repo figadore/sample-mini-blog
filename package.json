@@ -21,7 +21,7 @@
     "express": "~4.13.3",
     "forever": "^0.15.1",
     "mysql": "^2.11.1",
-    "sequelize": "^3.24.1",
+    "sequelize": ">=4.12.0",
     "shiny-express-errors": "~1.1.1",
     "shiny-express-formatter": "~0.4.0"
   }
